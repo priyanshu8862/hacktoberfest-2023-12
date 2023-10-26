@@ -1,0 +1,28 @@
+def countSubsets(arr, N, sum):
+    MOD = 10**9 + 7
+
+    # Create a DP table to store the count of subsets with sum 's'
+    dp = [[0 for _ in range(sum+1)] for _ in range(N+1)]
+
+    # There is one way to make an empty subset, i.e., by taking no elements
+    for i in range(N+1):
+        dp[i][0] = 1
+
+    # Fill the DP table
+    for i in range(1, N+1):
+        for s in range(1, sum+1):
+            # If the current element is greater than the sum, exclude it
+            if arr[i-1] > s:
+                dp[i][s] = dp[i-1][s]
+            else:
+                # Include the current element or exclude it
+                dp[i][s] = (dp[i-1][s] + dp[i-1][s-arr[i-1]]) % MOD
+
+    return dp[N][sum]
+
+# Example usage
+N = 6
+arr = [5, 2, 3, 10, 6, 8]
+sum = 10
+result = countSubsets(arr, N, sum)
+print(result)
